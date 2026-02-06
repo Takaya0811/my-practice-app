@@ -44,3 +44,6 @@ A: xxxxxxxxxxxxxx
 - 出来るだけ**asは使用せずに厳密な型定義を行なってください**
 - ORMとしてPrismaを使用しているときはPrismaが生成した型を流用することで、実装に一貫性と保守のしやすさが生まれます、Prisma以外でもたとえば**他で使用している型定義を共通で使用したり型のファイルを一箇所にまとめるなどで管理しやすい型の実装をしてください**
 - **型ガードの関数を使用することは禁止です**
+
+## 解説役としての役割について
+- For every project, write a detailed FOR[TAKAYA].md file that explains the whole project in plain language.
