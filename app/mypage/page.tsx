@@ -1,0 +1,129 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "@/lib/auth-client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PlanCard } from "@/components/plan/PlanCard";
+import type { PlanListItem } from "@/types/plan";
+
+interface ApiPlanResponse {
+  id: string;
+  destination: string;
+  days: number;
+  thumbnailUrl: string | null;
+  createdAt: string;
+  author: {
+    id: string;
+    name: string;
+  };
+  _count: {
+    likes: number;
+  };
+}
+
+export default function MyPage() {
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
+  const [myPlans, setMyPlans] = useState<PlanListItem[]>([]);
+  const [bookmarkedPlans, setBookmarkedPlans] = useState<PlanListItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push("/login");
+    }
+  }, [session, isPending, router]);
+
+  useEffect(() => {
+    if (session) {
+      fetchData();
+    }
+  }, [session]);
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const [myPlansRes, bookmarksRes] = await Promise.all([
+        fetch("/api/me/plans"),
+        fetch("/api/me/bookmarks"),
+      ]);
+
+      if (myPlansRes.ok) {
+        const data: ApiPlanResponse[] = await myPlansRes.json();
+        setMyPlans(data);
+      }
+
+      if (bookmarksRes.ok) {
+        const data: ApiPlanResponse[] = await bookmarksRes.json();
+        setBookmarkedPlans(data);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isPending || !session) {
+    return (
+      <div className="flex items-center justify-center min-h-[50vh]">
+        <p>読み込み中...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold mb-2">マイページ</h1>
+        <p className="text-muted-foreground">{session.user.name}</p>
+      </div>
+
+      <Tabs defaultValue="bookmarks">
+        <TabsList className="mb-6">
+          <TabsTrigger value="bookmarks">
+            保存したプラン ({bookmarkedPlans.length})
+          </TabsTrigger>
+          <TabsTrigger value="my-plans">
+            自分の投稿 ({myPlans.length})
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="bookmarks">
+          {isLoading ? (
+            <div className="text-center py-12 text-muted-foreground">
+              読み込み中...
+            </div>
+          ) : bookmarkedPlans.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {bookmarkedPlans.map((plan) => (
+                <PlanCard key={plan.id} plan={plan} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-muted-foreground">
+              保存したプランはありません
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="my-plans">
+          {isLoading ? (
+            <div className="text-center py-12 text-muted-foreground">
+              読み込み中...
+            </div>
+          ) : myPlans.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {myPlans.map((plan) => (
+                <PlanCard key={plan.id} plan={plan} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 text-muted-foreground">
+              投稿したプランはありません
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
