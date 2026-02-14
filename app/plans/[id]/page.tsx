@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { PlanActions } from "@/components/plan/PlanActions";
 import { DaySchedule } from "@/components/plan/DaySchedule";
+import { ArrowLeft, MapPin, Calendar, User } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -98,9 +99,10 @@ export default async function PlanDetailPage({ params }: PageProps) {
     <div className="container mx-auto py-8 px-4 max-w-2xl">
       <Link
         href="/"
-        className="inline-flex items-center text-muted-foreground hover:text-foreground mb-6"
+        className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground mb-6 transition-colors"
       >
-        ← トップに戻る
+        <ArrowLeft className="h-4 w-4" />
+        トップに戻る
       </Link>
 
       {/* サムネイル */}
@@ -108,11 +110,12 @@ export default async function PlanDetailPage({ params }: PageProps) {
         <img
           src={plan.thumbnailUrl}
           alt={plan.destination}
-          className="w-full h-64 object-cover rounded-lg mb-6"
+          className="w-full h-72 object-cover rounded-xl shadow-sm mb-6"
         />
       ) : (
-        <div className="w-full h-64 bg-muted rounded-lg mb-6 flex items-center justify-center text-muted-foreground">
-          No Image
+        <div className="w-full h-72 rounded-xl shadow-sm mb-6 flex flex-col items-center justify-center bg-muted text-muted-foreground">
+          <MapPin className="h-10 w-10 mb-2 text-primary/40" />
+          <span>No Image</span>
         </div>
       )}
 
@@ -129,15 +132,15 @@ export default async function PlanDetailPage({ params }: PageProps) {
         </div>
 
         <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-          <span className="inline-flex items-center gap-1">
-            📅 {plan.days}日間
+          <span className="inline-flex items-center gap-1.5">
+            <Calendar className="h-4 w-4" />
+            {plan.days}日間
           </span>
-          <span className="inline-flex items-center gap-1">
-            👤 {plan.author.name}
+          <span className="inline-flex items-center gap-1.5">
+            <User className="h-4 w-4" />
+            {plan.author.name}
           </span>
-          <span className="inline-flex items-center gap-1">
-            🕐 {formattedDate}
-          </span>
+          <span>{formattedDate}</span>
         </div>
       </div>
 

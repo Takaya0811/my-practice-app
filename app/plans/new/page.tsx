@@ -213,20 +213,30 @@ export default function NewPlanPage() {
 
       {/* ステップインジケーター */}
       <div className="flex items-center mb-8">
-        <div
-          className={`flex items-center justify-center w-8 h-8 rounded-full ${
-            currentStep >= 1 ? "bg-primary text-primary-foreground" : "bg-muted"
-          }`}
-        >
-          1
+        <div className="flex flex-col items-center gap-1">
+          <div
+            className={`flex items-center justify-center w-8 h-8 rounded-full ${
+              currentStep >= 1 ? "bg-primary text-primary-foreground" : "bg-muted"
+            }`}
+          >
+            1
+          </div>
+          <span className={`text-xs ${currentStep >= 1 ? "text-primary font-medium" : "text-muted-foreground"}`}>
+            基本情報
+          </span>
         </div>
-        <div className={`flex-1 h-1 mx-2 ${currentStep >= 2 ? "bg-primary" : "bg-muted"}`} />
-        <div
-          className={`flex items-center justify-center w-8 h-8 rounded-full ${
-            currentStep >= 2 ? "bg-primary text-primary-foreground" : "bg-muted"
-          }`}
-        >
-          2
+        <div className={`flex-1 h-1 mx-2 mb-5 ${currentStep >= 2 ? "bg-primary" : "bg-muted"}`} />
+        <div className="flex flex-col items-center gap-1">
+          <div
+            className={`flex items-center justify-center w-8 h-8 rounded-full ${
+              currentStep >= 2 ? "bg-primary text-primary-foreground" : "bg-muted"
+            }`}
+          >
+            2
+          </div>
+          <span className={`text-xs ${currentStep >= 2 ? "text-primary font-medium" : "text-muted-foreground"}`}>
+            日程入力
+          </span>
         </div>
       </div>
 

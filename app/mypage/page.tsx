@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PlanCard } from "@/components/plan/PlanCard";
+import { User, Bookmark, PenLine, Compass } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { PlanCardSkeleton } from "@/components/plan/PlanCardSkeleton";
 import type { PlanListItem } from "@/types/plan";
 
 interface ApiPlanResponse {
@@ -65,33 +68,54 @@ export default function MyPage() {
 
   if (isPending || !session) {
     return (
-      <div className="flex items-center justify-center min-h-[50vh]">
-        <p>読み込み中...</p>
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8 flex items-center gap-4">
+          <Skeleton className="w-14 h-14 rounded-full" />
+          <div>
+            <Skeleton className="h-7 w-32 mb-2" />
+            <Skeleton className="h-4 w-48" />
+          </div>
+        </div>
+        <Skeleton className="h-10 w-64 mb-6" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <PlanCardSkeleton key={i} />
+          ))}
+        </div>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-2">マイページ</h1>
-        <p className="text-muted-foreground">{session.user.name}</p>
+      <div className="mb-8 flex items-center gap-4">
+        <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center">
+          <User className="h-7 w-7 text-primary-foreground" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-bold">マイページ</h1>
+          <p className="text-muted-foreground">{session.user.name}</p>
+        </div>
       </div>
 
       <Tabs defaultValue="bookmarks">
         <TabsList className="mb-6">
-          <TabsTrigger value="bookmarks">
+          <TabsTrigger value="bookmarks" className="gap-1.5">
+            <Bookmark className="h-4 w-4" />
             保存したプラン ({bookmarkedPlans.length})
           </TabsTrigger>
-          <TabsTrigger value="my-plans">
+          <TabsTrigger value="my-plans" className="gap-1.5">
+            <PenLine className="h-4 w-4" />
             自分の投稿 ({myPlans.length})
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="bookmarks">
           {isLoading ? (
-            <div className="text-center py-12 text-muted-foreground">
-              読み込み中...
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <PlanCardSkeleton key={i} />
+              ))}
             </div>
           ) : bookmarkedPlans.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -100,16 +124,20 @@ export default function MyPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              保存したプランはありません
+            <div className="text-center py-16 text-muted-foreground">
+              <Bookmark className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
+              <p className="text-lg font-medium mb-1">保存したプランはありません</p>
+              <p className="text-sm">気になるプランを保存してみましょう</p>
             </div>
           )}
         </TabsContent>
 
         <TabsContent value="my-plans">
           {isLoading ? (
-            <div className="text-center py-12 text-muted-foreground">
-              読み込み中...
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <PlanCardSkeleton key={i} />
+              ))}
             </div>
           ) : myPlans.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -118,8 +146,10 @@ export default function MyPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-muted-foreground">
-              投稿したプランはありません
+            <div className="text-center py-16 text-muted-foreground">
+              <Compass className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
+              <p className="text-lg font-medium mb-1">投稿したプランはありません</p>
+              <p className="text-sm">あなたの旅行プランを共有してみましょう</p>
             </div>
           )}
         </TabsContent>
