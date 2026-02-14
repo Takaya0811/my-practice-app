@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { SearchForm } from "@/components/plan/SearchForm";
 import { PlanCard } from "@/components/plan/PlanCard";
+import { MapPin, Calendar, Compass } from "lucide-react";
 import type { PlanListItem } from "@/types/plan";
 
 interface PageProps {
@@ -71,12 +72,19 @@ export default async function PlansPage({ searchParams }: PageProps) {
 
       {/* 検索条件の表示 */}
       {hasFilters && (
-        <div className="mb-6">
-          <p className="text-muted-foreground">
-            検索条件:
-            {destination && <span className="ml-2">旅行先「{destination}」</span>}
-            {days && days !== "all" && <span className="ml-2">{days}日間</span>}
-          </p>
+        <div className="mb-6 flex flex-wrap gap-2">
+          {destination && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
+              <MapPin className="h-3.5 w-3.5" />
+              旅行先「{destination}」
+            </span>
+          )}
+          {days && days !== "all" && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1 text-sm text-secondary-foreground">
+              <Calendar className="h-3.5 w-3.5" />
+              {days}日間
+            </span>
+          )}
         </div>
       )}
 
@@ -92,8 +100,10 @@ export default async function PlansPage({ searchParams }: PageProps) {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 text-muted-foreground">
-            条件に一致するプランが見つかりませんでした
+          <div className="text-center py-16 text-muted-foreground">
+            <Compass className="h-12 w-12 mx-auto mb-3 text-muted-foreground/40" />
+            <p className="text-lg font-medium mb-1">条件に一致するプランが見つかりませんでした</p>
+            <p className="text-sm">別の条件で検索してみましょう</p>
           </div>
         )}
       </section>

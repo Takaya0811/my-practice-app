@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Search } from "lucide-react";
 
 interface SearchFormProps {
   initialDestination?: string;
@@ -43,7 +44,7 @@ export function SearchForm({ initialDestination = "", initialDays = "" }: Search
   };
 
   return (
-    <div className="bg-card border rounded-lg p-6 space-y-4">
+    <div className="bg-card border rounded-xl p-6 sm:p-8 shadow-sm space-y-4">
       <h2 className="text-lg font-semibold">プランを検索</h2>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -78,7 +79,8 @@ export function SearchForm({ initialDestination = "", initialDays = "" }: Search
         </div>
       </div>
 
-      <Button onClick={handleSearch} className="w-full sm:w-auto">
+      <Button onClick={handleSearch} size="lg" className="w-full sm:w-auto">
+        <Search className="h-4 w-4 mr-1" />
         検索する
       </Button>
     </div>

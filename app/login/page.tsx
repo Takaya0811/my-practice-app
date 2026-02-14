@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
 type Mode = "login" | "register";
 
@@ -69,8 +70,9 @@ export default function LoginPage() {
 
   if (isPending) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>読み込み中...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="text-muted-foreground">読み込み中...</p>
       </div>
     );
   }
@@ -78,7 +80,8 @@ export default function LoginPage() {
   return (
     <div className="flex items-center justify-center min-h-screen px-4">
       <Card className="w-full max-w-md">
-        <CardHeader>
+        <CardHeader className="text-center">
+          <p className="text-xl font-bold text-primary mb-1">旅プラン</p>
           <CardTitle>{mode === "login" ? "ログイン" : "新規登録"}</CardTitle>
         </CardHeader>
         <CardContent>
@@ -129,11 +132,16 @@ export default function LoginPage() {
             </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading
-                ? "処理中..."
-                : mode === "login"
-                  ? "ログイン"
-                  : "登録する"}
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                  処理中...
+                </>
+              ) : mode === "login" ? (
+                "ログイン"
+              ) : (
+                "登録する"
+              )}
             </Button>
           </form>
 
